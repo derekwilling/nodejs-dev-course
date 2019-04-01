@@ -25,9 +25,7 @@ const addNote = (noteTitle, noteBody) => {
 
 const removeNote = (noteTitle) => {
     const notes = loadNotes()
-    const newNotes = notes.filter((note)=>{
-        return !(note.title === noteTitle)
-    })
+    const newNotes = notes.filter((note)=> !(note.title === noteTitle))
     if (newNotes.length === notes.length) {
         console.log(chalk.red.inverse('No note with that title found...'))
     } else {
