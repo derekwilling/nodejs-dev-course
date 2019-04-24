@@ -10,16 +10,16 @@ const forecast = require('./utils/forecast')
 // 4. Test your work with a couple of locations.
 
 if (process.argv[2]) {
-    geocode(process.argv[2], (error, data) => {
+    geocode(process.argv[2], (error, {longitude, latitude, location}) => {
         if (error) {
             return console.log('Error', error)
         } else {
             // console.log('Data', data)
-            forecast(data.longitude, data.latitude, (error, forecastData) => {
+            forecast(longitude, latitude, (error, forecastData) => {
                 if (error) {
                     return console.log('Error', error)
                 } else {
-                    console.log(data.location)
+                    console.log(location)
                     console.log(forecastData)
                 }
               })

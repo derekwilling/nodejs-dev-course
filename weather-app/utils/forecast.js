@@ -8,13 +8,13 @@ const request = require('request')
 const forecast = (latitude, longitude, callback) => {
     const url = 'https://api.darksky.net/forecast/31c6091b3e385f767a6b40c9c80c03aa/' + latitude + ',' + longitude 
 
-    request({ url: url, json: true}, (error, response) => {
+    request({ url, json: true}, (error, { body }) => {
         if (error) {
             callback('There was a problem getting the forecast!', undefined)
-        } else if  (response.body.code === 400) {
+        } else if  (body.code === 400) {
             callback('The co-ordinates provided were invalid.', undefined)
         } else {
-            callback(undefined, `${response.body.daily.data[0].summary} It is currently ${response.body.currently.temperature} degrees out. There is ${response.body.currently.precipProbability} chance of rain.`)
+            callback(undefined, `${body.daily.data[0].summary} It is currently ${body.currently.temperature} degrees out. There is ${body.currently.precipProbability} chance of rain.`)
         }
     })
 }
