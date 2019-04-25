@@ -47,4 +47,19 @@ app.get('/weather', (req, res) => {
     })
 })
 
+app.get('/help/*', (req, res) => {
+    res.render('404', {
+        title: 'Help',
+        message: 'Sorry, that help page was not found!',
+        name: 'Derek Willingham'
+    })
+})
+
+app.get('*', (req, res) => {
+    res.render('404', {
+        message:`We couldn't locate that page! Sorry!`,
+        name: 'Derek Willingham'
+    }) 
+})
+
 app.listen(port, () => console.log(`Express listening on port ${port}`))
