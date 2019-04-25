@@ -1,21 +1,43 @@
 const path = require('path')
 const express = require('express')
+const hbs = require('hbs')
 
 const app = express()
-const publicPath = path.join(__dirname, '..//public')
 const port = 3000
 
+// Define paths for express config
+const publicPath = path.join(__dirname, '../public')
+const viewsPath = path.join(__dirname, '../templates/views')
+const partialsPath = path.join(__dirname, '../templates/partials')
+
+// Handlebars Configuration
+app.set('view engine', 'hbs')
+app.set('views', viewsPath)
+hbs.registerPartials(partialsPath)
+
+// Configure static directory to serve
 app.use(express.static(publicPath))
 
 app.get('/', (req, res) => {
+    res.render('index', {
+        title: 'Weather App',
+        name: 'Derek Willingham'
+    })
 })
 
 app.get('/help', (req, res) => {
-    res.sendFile(path.join(publicPath, '//help.html'))
+    res.render('help', {
+        title: 'Help',
+        message: 'You need help!',
+        name: 'Derek Willingham'
+    })
 })
 
 app.get('/about', (req, res) => {
-    res.sendFile(path.join(publicPath, '//about.html'))
+    res.render('about', {
+        title: 'About',
+        name: 'Derek Willingham'
+    })
 })
 
 app.get('/weather', (req, res) => {
