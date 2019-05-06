@@ -41,9 +41,27 @@ app.get('/about', (req, res) => {
 })
 
 app.get('/weather', (req, res) => {
+    if (!req.query.address) {
+        return res.send({
+            error: 'You must provide an address.'
+        })
+    }
     res.send({
-        forecast: 'Rainy with a chance of meatballs.',
-        locaiton: 'Narnia'
+        forcast: 'Meteor Storm',
+        location: 'Georgia',
+        address: req.query.address
+    })
+})
+
+app.get('/products', (req, res) => {
+    if (!req.query.search) {
+        return res.send({
+            error: 'You must provide a search term.'
+        })
+    }
+    console.log(req.query)
+    res.send({
+        products: []
     })
 })
 
@@ -58,9 +76,9 @@ app.get('/help/*', (req, res) => {
 app.get('*', (req, res) => {
     res.render('404', {
         title: '404',
-        message:`We couldn't locate that page! Sorry!`,
+        message: `We couldn't locate that page! Sorry!`,
         name: 'Derek Willingham'
-    }) 
+    })
 })
 
 app.listen(port, () => console.log(`Express listening on port ${port}`))
