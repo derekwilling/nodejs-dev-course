@@ -8,21 +8,23 @@
 
 const locationInput = document.querySelector('input')
 const weatherForm = document.querySelector('form')
+const messageOne = document.querySelector('#message-1')
+const messageTwo = document.querySelector('#message-2')
 
 weatherForm.addEventListener("submit", (e) => {
     e.preventDefault()
 
+    messageOne.textContent = `Loading...`
     const location = locationInput.value
-    // console.log(locationInput.value)
-    // console.log(e.target[0].value)
 
     fetch('http://localhost:3000/weather?address='+location).then((response) => {
         response.json().then((data) => {
             if (data.error) {
-                console.log('Error: ', data.error)
+                messageOne.textContent = data.error
+                messageTwo.textContent = ``
             } else {
-                console.log('Location: ', data.location)
-                console.log('Forecast: ', data.forecast)
+                messageOne.textContent = data.location
+                messageTwo.textContent = data.forecast
             }
         })
     })
