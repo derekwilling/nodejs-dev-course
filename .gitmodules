@@ -1,0 +1,3 @@
+[submodule "weather-app"]
+	path = weather-app
+	url = git@github.com:DirtySoc/weather-app.git
