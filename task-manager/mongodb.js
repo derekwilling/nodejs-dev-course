@@ -7,9 +7,6 @@ const { MongoClient, ObjectID } = require('mongodb')
 const connectionURL = 'mongodb://127.0.0.1:27017'
 const databaseName = 'task-manager'
 
-const id = new ObjectID()
-console.log(id)
-
 MongoClient.connect(connectionURL, { useNewUrlParser: true }, (error, client) => {
     if (error) {
         return console.log('Unable to connect to DB')
@@ -17,46 +14,36 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true }, (error, client) =>
 
     const db = client.db(databaseName)
 
-    // db.collection('users').insertOne({
-    //     name: 'Derek',
-    //     age: 23
-    // }, (error, result) => {
+    // db.collection('users').findOne({ _id: new ObjectID('5cd82a863b4cc22ee89baaad') }, (error, user) => {
     //     if (error) {
-    //         return console.log(error)
+    //         console.log('Unable to fetch.')
     //     }
-    //     console.log(result.ops)
+    //     console.log(user)
     // })
 
-    // db.collection('users').insertMany([
-    //     {
-    //         name: 'Bill',
-    //         age: 44
-    //     }, {
-    //         name: 'Jordan',
-    //         age: 21
-    //     }
-    // ], (error, result) => {
+    // db.collection('users').insertMany([{
+    //     name: 'Jerry',
+    //     age: 44
+    // }, {
+    //     name: 'Juliane',
+    //     age: 44
+    // }], (error, result) => {
     //     if (error) {
-    //         return console.log(error)
+    //         console.log('Cannot insert documents.')
     //     }
-    //     console.log(result.ops)
     // })
 
-    // db.collection('tasks').insertMany([
-    //     {
-    //         description: 'Wash clothes.' ,
-    //         completed: false
-    //     }, {
-    //         description: 'Cook lunch.',
-    //         completed: false
-    //     }, {
-    //         description: 'Mow grass.',
-    //         completed: true
-    //     }
-    // ], (error, result) => {
-    //     if (error) {
-    //         return console.log('Error inserting documents into collection.')
-    //     }
-    //     console.log(result.ops)
+    // db.collection('users').find({ age: 44 }).toArray((error, users) => {
+    //     console.log(users)
     // })
+    // db.collection('users').find({ age: 44 }).count((error, count) => {
+    //     console.log(count)
+    // })
+
+    db.collection('tasks').findOne({ _id: new ObjectID("5cd62fc3b275cd2d542008cb") }, (error, task) => {
+        console.log(task)
+    })
+    db.collection('tasks').find({ completed: false }).toArray((error, tasks) => {
+        console.log(tasks)
+    })
 })
