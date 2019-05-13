@@ -14,36 +14,27 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true }, (error, client) =>
 
     const db = client.db(databaseName)
 
-    // db.collection('users').findOne({ _id: new ObjectID('5cd82a863b4cc22ee89baaad') }, (error, user) => {
-    //     if (error) {
-    //         console.log('Unable to fetch.')
-    //     }
-    //     console.log(user)
-    // })
+    db.collection('tasks').updateMany({ 
+        completed: false 
+    }, {
+        $set: {
+            completed: true
+        }
+    }).then((result)=> {
+        console.log('Update successful!')
+    }).catch((err) => {
+        console.log('Error updating!')
+    })
 
-    // db.collection('users').insertMany([{
-    //     name: 'Jerry',
-    //     age: 44
+    // db.collection('tasks').insertMany([{
+    //     description: 'Finish learning!!!!',
+    //     completed: false
     // }, {
-    //     name: 'Juliane',
-    //     age: 44
-    // }], (error, result) => {
-    //     if (error) {
-    //         console.log('Cannot insert documents.')
-    //     }
+    //     description: 'Drink water.',
+    //     completed: false
+    // }]).then((res) => {
+    //     console.log('Insert successful!')
+    // }).catch((err) => {
+    //     console.log('ERROR: Insert failed.')
     // })
-
-    // db.collection('users').find({ age: 44 }).toArray((error, users) => {
-    //     console.log(users)
-    // })
-    // db.collection('users').find({ age: 44 }).count((error, count) => {
-    //     console.log(count)
-    // })
-
-    db.collection('tasks').findOne({ _id: new ObjectID("5cd62fc3b275cd2d542008cb") }, (error, task) => {
-        console.log(task)
-    })
-    db.collection('tasks').find({ completed: false }).toArray((error, tasks) => {
-        console.log(tasks)
-    })
 })
