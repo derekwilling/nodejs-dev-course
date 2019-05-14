@@ -1,7 +1,5 @@
-// const mongodb = require('mongodb')
-// const MongoClient = mongodb.MongoClient
-// const ObjectID = mongodb.ObjectID
-
+// This is an example file showing how MongoDB works. It is not required
+// for this project.
 const { MongoClient, ObjectID } = require('mongodb')
 
 const connectionURL = 'mongodb://127.0.0.1:27017'
@@ -25,16 +23,4 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true }, (error, client) =>
     }).catch((err) => {
         console.log('Error updating!')
     })
-
-    // db.collection('tasks').insertMany([{
-    //     description: 'Finish learning!!!!',
-    //     completed: false
-    // }, {
-    //     description: 'Drink water.',
-    //     completed: false
-    // }]).then((res) => {
-    //     console.log('Insert successful!')
-    // }).catch((err) => {
-    //     console.log('ERROR: Insert failed.')
-    // })
 })
