@@ -34,8 +34,30 @@ app.get('/users/:id', async (req, res) => {
     try {
         const user = await User.findById(_id)
         if(!user) {
-            res.status(404).send()
+            return res.status(404).send()
         }
+        res.send(user)
+    } catch (error) {
+        res.status(500).send()
+    }
+})
+
+app.patch('/users/:id', async (req, res) => {
+    const _id = req.params.id
+    const allowedUpdates = ['name', 'email', 'password', 'age']
+    const updates = Object.keys(req.body)
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
+
+    if (!isValidOperation) {
+        return res.status(400).send({ error: 'Invalid updates!'})
+    }
+
+    try {
+        const user = await User.findByIdAndUpdate(_id, req.body, { new: true, runValidators: true })
+        if (!user) {
+            return res.status(404).send()
+        }
+
         res.send(user)
     } catch (error) {
         res.status(500).send()
@@ -59,7 +81,7 @@ app.get('/tasks', async (req, res) => {
         const tasks = await Task.find({})
         res.send(tasks)
     } catch (error) {
-        res.status(500).send
+        res.status(500).send()
     }
 })
 
@@ -69,11 +91,32 @@ app.get('/tasks/:id', async (req, res) => {
     try {
         const task = await Task.findById(_id)
         if (!task) {
-            res.status(404).send()
+            return res.status(404).send()
         }
         res.send(task)
     } catch (error) {
         res.status(500).send()
+    }
+})
+
+app.patch('/tasks/:id', async (req, res) => {
+    const _id = req.params.id
+    const allowedUpdates = ['completed', 'description']
+    const attemptedUpdates = Object.keys(req.body)
+    const isValidOperation = attemptedUpdates.every((update) => allowedUpdates.includes(update))
+
+    if (!isValidOperation) {
+        return res.status(400).send({ error: 'Invalid updates!'})
+    }
+
+    try {
+        const task = await Task.findByIdAndUpdate(_id, req.body, { new: true, runValidators: true })
+        if (!task) {
+            return res.status(404).send()
+        }
+        res.send(task)
+    } catch (error) {
+        res.status(500).send(error)
     }
 })
 
