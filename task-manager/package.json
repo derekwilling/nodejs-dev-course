@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "concurrently --kill-others \"npm run database\" \"nodemon src/index.js\"",
+    "dev": "nodemon src/index.js",
     "database": "C:\\Users\\derek\\mongodb\\bin\\mongod.exe --dbpath C:\\Users\\derek\\mongodb-data\\"
   },
   "keywords": [],
@@ -17,11 +17,9 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.2.4",
     "mongoose": "^5.5.7",
-    "multer": "^1.4.1",
     "validator": "^10.11.0"
   },
   "devDependencies": {
-    "concurrently": "^4.1.0",
     "nodemon": "^1.19.0"
   }
 }

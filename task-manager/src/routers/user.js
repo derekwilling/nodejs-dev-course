@@ -1,12 +1,11 @@
 const express = require('express')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
-const multer = require('multer')
 const router = new express.Router()
 
 router.post('/users', async (req, res) => {
     const user = new User(req.body)
-
+    
     try {
         const token = await user.generateAuthToken()
         await user.save()
@@ -66,7 +65,7 @@ router.patch('/users/me', auth, async (req, res) => {
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
     if (!isValidOperation) {
-        return res.status(400).send({ error: 'Invalid updates!' })
+        return res.status(400).send({ error: 'Invalid updates!'})
     }
 
     try {
@@ -85,32 +84,6 @@ router.delete('/users/me', auth, async (req, res) => {
     } catch (error) {
         res.status(500).send()
     }
-})
-
-const upload = multer({ 
-    limits: {
-        fileSize: 1000000
-    }, 
-    fileFilter(req ,file, cb) {
-        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-            cb(new Error('Please upload a png, jpeg, or jpg.'))
-        }
-        cb(undefined, true)
-    }
- })
-
-router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) => {
-    req.user.avatar = req.file.buffer
-    await req.user.save()
-    res.send()
-}, (err, req, res, next) => {
-    res.status(400).send({ error: err.message })
-})
-
-router.delete('/users/me/avatar', auth, async (req, res) => {
-    req.user.avatar = undefined
-    await req.user.save()
-    res.send()
 })
 
 module.exports = router
