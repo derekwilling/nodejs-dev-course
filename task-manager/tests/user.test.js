@@ -1,24 +1,9 @@
 const request = require('supertest')
-const jwt = require('jsonwebtoken')
-const mongoose = require('mongoose')
 const app = require('../src/app')
 const User = require('../src/models/user')
+const {userOneId, userOne, setupDatabase} = require('./fixtures/db')
 
-const userOneId = new mongoose.Types.ObjectId()
-const userOne = {
-    _id: userOneId,
-    name: 'Mike Bob',
-    email: 'mikebob@example.com',
-    password: 'Pass12345!',
-    tokens: [{
-        token:jwt.sign({_id: userOneId}, process.env.JWT_SECRET)
-    }]
-}
-
-beforeEach(async () => {
-    await User.deleteMany()
-    await new User(userOne).save()
-})
+beforeEach(setupDatabase)
 
 test('Should signup a new user', async () => {
     const response = await request(app)
@@ -100,3 +85,45 @@ test('Should not delete account for unauthorized user', async () => {
         .send()
         .expect(401)        
 })
+
+test('Should upload avatar image', async () => {
+    await request(app)
+        .post('/users/me/avatar')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .attach('avatar', 'tests/fixtures/profile-pic.jpg')
+        .expect(200)
+    const user = await User.findById(userOneId)
+    expect(user.avatar).toEqual(expect.any(Buffer))
+})
+
+test('Should update user name', async () => {
+    const response = await request(app)
+        .patch('/users/me')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send({
+            "name": "Admiral Ackbar"
+        })
+        .expect(200)
+    const user = await User.findById(response.body._id)
+    expect(user.name).toBe('Admiral Ackbar')
+})
+
+test('should not update invalid user fields', async () => {
+    const response = await request(app)
+        .patch('/users/me')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send({
+            _id: 'dhjfldk',
+            location: 'Atlanta'
+        })
+        .expect(400)        
+})
+
+
+//
+// User Test Ideas
+//
+// Should not signup user with invalid name/email/password
+// Should not update user if unauthenticated
+// Should not update user with invalid name/email/password
+// Should not delete user if unauthenticated
