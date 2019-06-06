@@ -14,27 +14,33 @@ socket.on('message', (message) => {
     console.log(message)
 
     const html = Mustache.render(messageTemplate, {
-        message
+        message: message.text,
+        createdAt: moment(message.createdAt).format("h:mm a")
     })
     $messages.insertAdjacentHTML('beforeend', html)
 })
 
-socket.on('locationMessage', (locationUrl) => {
-    console.log(locationUrl)
+socket.on('locationMessage', (locationMessage) => {
+    console.log(locationMessage)
 
     const html = Mustache.render(locationUrlTemplate, {
-        locationUrl
+        locationUrl: locationMessage.text,
+        createdAt: moment(locationMessage.createdAt).format("h:mm a")
     })
     $messages.insertAdjacentHTML('beforeend', html)
 })
 
 $messageForm.addEventListener('submit', (e) => {
     e.preventDefault()
-    $messageFormButton.setAttribute('disabled', 'disabled')
-
     const message = e.target.elements.message.value
 
-    socket.emit('message', message, (error) => {
+    if (!message) {
+        return
+    }
+
+    $messageFormButton.setAttribute('disabled', 'disabled')
+
+    socket.emit('sendMessage', message, (error) => {
         $messageFormButton.removeAttribute('disabled')
         $messageFormInput.value = ''
         $messageFormInput.focus()
