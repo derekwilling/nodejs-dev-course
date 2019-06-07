@@ -1,8 +1,19 @@
-const generateMessage = (text) => {
+const { getUser } = require('./users')
+
+const generateMessage = (username, text) => {
     return {
         text,
-        createdAt: new Date().getTime()
+        createdAt: new Date().getTime(),
+        username
     }
 }
 
-module.exports = { generateMessage }
+const generateLocationMessage = (username, url) => {
+    return {
+        url,
+        createdAt: new Date().getTime(),
+        username
+    }
+}
+
+module.exports = { generateMessage, generateLocationMessage }
